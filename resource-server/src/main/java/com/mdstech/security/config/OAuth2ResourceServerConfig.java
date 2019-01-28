@@ -27,8 +27,11 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
     @Autowired
     private ResourceServerTokenServices tokenServices;
 
+
+
     @Override
     public void configure(ResourceServerSecurityConfigurer config) {
+        config.resourceId("resource1");
         config.tokenServices(tokenServices);
     }
 

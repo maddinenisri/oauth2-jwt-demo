@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -32,8 +33,17 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+        oauthServer.allowFormAuthenticationForClients()
+                .checkTokenAccess("isAuthenticated()")
+                .addTokenEndpointAuthenticationFilter(checkTokenEndpointFilter());
+    }
+
+    @Bean
+    public ClientCredentialsTokenEndpointFilter checkTokenEndpointFilter() {
+        ClientCredentialsTokenEndpointFilter filter = new ClientCredentialsTokenEndpointFilter("/oauth/check_token");
+        filter.setAuthenticationManager(authenticationManager);
+        filter.setAllowOnlyPost(true);
+        return filter;
     }
 
     @Override
@@ -90,7 +100,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         .secret(passwordEncoder.encode("secret2"))
         .authorizedGrantTypes("client-credentials", "password", "refresh_token")
         .scopes("read", "write", "trust")
-        .resourceIds("oauth2-resource")
+        .resourceIds("resource1")
                 .accessTokenValiditySeconds(5000)
                 .refreshTokenValiditySeconds(50000)
         ; // 24 hours
