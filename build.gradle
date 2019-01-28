@@ -3,15 +3,32 @@ buildscript {
         springBootVersion = '2.1.1.RELEASE'
     }
     repositories {
-        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
-plugins {
-    id 'java'
-    id 'idea'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    group 'com.mdstech.security'
+    version '1.0-SNAPSHOT'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+        }
+    }
 }
 
