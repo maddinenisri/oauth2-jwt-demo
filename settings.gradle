@@ -1,0 +1,5 @@
+rootProject.name = 'oauth2-jwt-demo'
+
+include 'auth-server'
+include 'resource-server'
+

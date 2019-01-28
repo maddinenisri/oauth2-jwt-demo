@@ -1,0 +1,12 @@
+server:
+  port: 8080
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+  jwt:
+    client-id: myclient
+    client-secret: secret
+    grant-type: password
+    scope-read: read
+    scope-write: write

@@ -1,0 +1,52 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'io.spring.dependency-management'
+}
+
+ext { springBootVersion = '2.1.0.RELEASE' }
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group 'com.mdstech.security'
+version '1.0-SNAPSHOT'
+
+jar {
+    baseName = 'auth-server'
+    version = '1.0-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+
+repositories { mavenCentral() }
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.3.4.RELEASE")
+    compile("org.springframework.security:spring-security-jwt:1.0.9.RELEASE")
+    compile("org.apache.commons:commons-lang3:3.7")
+    compile("org.slf4j:slf4j-api")
+    compile("org.apache.logging.log4j:log4j-api:2.10.0")
+    compile("org.apache.logging.log4j:log4j-core:2.10.0")
+    annotationProcessor("org.projectlombok:lombok:1.16.20")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springfeamework.boot.security:spring-security-test')
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+}
