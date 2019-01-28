@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -28,6 +29,12 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        oauthServer.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()");
+    }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -77,7 +84,16 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .secret(passwordEncoder.encode("secret"))
                 .authorizedGrantTypes("password")
                 .scopes("read")
-                .accessTokenValiditySeconds(86400); // 24 hours
+                .accessTokenValiditySeconds(86400)
+        .and()
+        .withClient("myclient2")
+        .secret(passwordEncoder.encode("secret2"))
+        .authorizedGrantTypes("client-credentials", "password", "refresh_token")
+        .scopes("read", "write", "trust")
+        .resourceIds("oauth2-resource")
+                .accessTokenValiditySeconds(5000)
+                .refreshTokenValiditySeconds(50000)
+        ; // 24 hours
         //@formatter:on
     }
 }
