@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import java.util.Arrays;
 
@@ -65,7 +67,12 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
+        KeyStoreKeyFactory keyStoreKeyFactory =
+                new KeyStoreKeyFactory(
+                        new ClassPathResource("mykeys.jks"),
+                        "mypass".toCharArray());
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("mykeys"));
+        //converter.setSigningKey("123");
         return converter;
     }
 
@@ -94,6 +101,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .secret(passwordEncoder.encode("secret"))
                 .authorizedGrantTypes("password")
                 .scopes("read")
+                .resourceIds("resource2")
                 .accessTokenValiditySeconds(86400)
         .and()
         .withClient("myclient2")
