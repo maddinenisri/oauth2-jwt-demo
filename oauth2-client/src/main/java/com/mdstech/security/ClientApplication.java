@@ -3,7 +3,9 @@ package com.mdstech.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
@@ -11,14 +13,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 public class ClientApplication implements CommandLineRunner {
 
-//    @Autowired
-//    private OAuth2RestTemplate oAuth2RestTemplate;
-
     @Autowired
     private OAuth2RestOperations restTemplate;
 
     public static void main(String[] args) {
-        SpringApplication.run(ClientApplication.class, args);
+        new SpringApplicationBuilder(ClientApplication.class)
+                .web(WebApplicationType.NONE)
+                .run(args);
+        //SpringApplication.run(ClientApplication.class, args);
     }
 
     @Override

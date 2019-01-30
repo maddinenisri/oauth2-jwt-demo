@@ -13,12 +13,9 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.AccessTokenProvider;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableOAuth2Client
@@ -31,9 +28,6 @@ public class OAuth2ClientConfig {
 
     @Value("${security.oauth2.client.accessTokenUri}")
     private String accessTokenUri;
-
-//    @Value("${security.oauth2.client.userAuthorizationUri}")
-//    private String userAuthorizationUri;
 
     @Value("${security.oauth2.client.clientId}")
     private String clientID;
@@ -58,18 +52,11 @@ public class OAuth2ClientConfig {
     @Bean
     public OAuth2RestOperations restTemplate() {
 
-        OAuth2RestTemplate template = new OAuth2RestTemplate(oAuth2ProtectedResourceDetails(), new DefaultOAuth2ClientContext(
+        OAuth2RestTemplate template = new OAuth2RestTemplate(oAuth2ProtectedResourceDetails(),
+                new DefaultOAuth2ClientContext(
                 new DefaultAccessTokenRequest()));
-        return prepareTemplate(template, false);
-    }
-
-    public OAuth2RestTemplate prepareTemplate(OAuth2RestTemplate template, boolean isClient) {
         template.setRequestFactory(getClientHttpRequestFactory());
-        if (isClient) {
-//            template.setAccessTokenProvider(clientAccessTokenProvider());
-        } else {
-            template.setAccessTokenProvider(userAccessTokenProvider());
-        }
+        template.setAccessTokenProvider(userAccessTokenProvider());
         return template;
     }
 
@@ -83,25 +70,7 @@ public class OAuth2ClientConfig {
         resource.setUsername("user1");
         resource.setPassword("password");
         return resource;
-
-//        AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
-//        details.setId("resource1");
-//        details.setClientId(clientID);
-//        details.setClientSecret(clientSecret);
-//        details.setAccessTokenUri(accessTokenUri);
-//        details.setUserAuthorizationUri(userAuthorizationUri);
-//        details.setTokenName("oauth_token");
-//        details.setScope(Arrays.asList("identity"));
-//        details.setPreEstablishedRedirectUri("http://localhost/login");
-//        details.setUseCurrentUri(false);
-//        return details;
     }
-
-//    @Bean
-//    public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext,
-//                                                 OAuth2ProtectedResourceDetails details) {
-//        return new OAuth2RestTemplate(details, oauth2ClientContext);
-//    }
 
     @Bean
     public OAuth2ClientContext oAuth2ClientContext() {
