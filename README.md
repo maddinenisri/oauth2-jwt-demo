@@ -26,3 +26,5 @@ keytool -list -rfc --keystore mykeys.jks  | openssl x509 -inform pem -pubkey
 curl -H "Authorization: bearer <access token>" http://localhost:9090/api/v1/status
 ```
 WIth invalid token {"error":"access_denied","error_description":"Invalid token does not contain resource id (resource1)"}
+
+### Reference: [Oauth2 Study](http://www.swisspush.org/security/2016/10/17/oauth2-in-depth-introduction-for-enterprises)
