@@ -56,8 +56,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
         return new CustomTokenEnhancer();
     }
 
-    @Bean
-    @Primary
+    //@Bean
+    //@Primary
     public ResourceServerTokenServices remoteTokenServices() {
         RemoteTokenServices tokenService = new RemoteTokenServices();
         tokenService.setCheckTokenEndpointUrl(
@@ -67,8 +67,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
         return tokenService;
     }
 
-//    @Bean
-//    @Primary
+    @Bean
+    @Primary
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
