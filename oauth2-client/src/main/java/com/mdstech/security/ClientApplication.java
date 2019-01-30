@@ -2,7 +2,6 @@ package com.mdstech.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -20,7 +19,6 @@ public class ClientApplication implements CommandLineRunner {
         new SpringApplicationBuilder(ClientApplication.class)
                 .web(WebApplicationType.NONE)
                 .run(args);
-        //SpringApplication.run(ClientApplication.class, args);
     }
 
     @Override
