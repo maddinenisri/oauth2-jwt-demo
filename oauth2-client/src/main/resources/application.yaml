@@ -1,0 +1,9 @@
+server:
+  port: 9001
+security:
+  oauth2:
+    client:
+      clientId: myclient2
+      clientSecret: secret2
+      accessTokenUri: http://localhost:8080/oauth/token
+      clientAuthenticationScheme: form
